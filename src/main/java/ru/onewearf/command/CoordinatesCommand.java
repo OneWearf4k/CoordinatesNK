@@ -5,11 +5,14 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.level.GameRule;
+import ru.onewearf.Loader;
 
 public class CoordinatesCommand extends Command {
-    public CoordinatesCommand() {
-        super("coordinates", "hide or show coordinates", "/coordinates show/hide");
+    private final Loader loader;
+
+    public CoordinatesCommand(Loader loader) {
+        super("coordinates", loader.getUtils().getDescription(), loader.getUtils().getUsage());
+        this.loader = loader;
         this.setAliases(new String[]{"coord"});
         this.commandParameters.clear();
         this.commandParameters.put("default", new CommandParameter[]{new CommandParameter("set", CommandParamType.STRING, false)});
@@ -23,23 +26,23 @@ public class CoordinatesCommand extends Command {
         }
 
         if (strings.length == 0) {
-            commandSender.sendMessage("Invalid command. Usage: " + this.usageMessage);
+            commandSender.sendMessage(this.loader.getUtils().getInvalid() + this.usageMessage);
             return false;
         }
 
         if (strings[0].equalsIgnoreCase("show")) {
-            commandSender.sendMessage("You have successfully hidden the coordinates");
-            ((Player) commandSender).getLevel().getGameRules().setGameRule(GameRule.SHOW_COORDINATES, true);
+            commandSender.sendMessage(this.loader.getUtils().getHide());
+            this.loader.getUtils().setCoordinates((Player) commandSender, true);
             return false;
         }
 
         if (strings[0].equalsIgnoreCase("hide")) {
-            commandSender.sendMessage("You have successfully enabled the coordinates");
-            ((Player) commandSender).getLevel().getGameRules().setGameRule(GameRule.SHOW_COORDINATES, false);
+            commandSender.sendMessage(this.loader.getUtils().getEnable());
+            this.loader.getUtils().setCoordinates((Player) commandSender, false);
             return false;
         }
 
-        commandSender.sendMessage("Invalid command. Usage: " + this.usageMessage);
+        commandSender.sendMessage(this.loader.getUtils().getInvalid() + this.usageMessage);
         return true;
     }
 }
