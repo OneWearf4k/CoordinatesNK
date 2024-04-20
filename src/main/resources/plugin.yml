@@ -1,0 +1,5 @@
+name: srcCoordinates
+version: "${project.version}"
+api: ["1.0.13"]
+author: OneWearf
+main: ru.onewearf.Loader
